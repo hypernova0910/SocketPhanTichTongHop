@@ -12,7 +12,7 @@ namespace SocketServer
     {
         private IPEndPoint _listenOn;
 
-        public UdpListener() : this(new IPEndPoint(IPAddress.Any, 32124))
+        public UdpListener() : this(new IPEndPoint(IPAddress.Any, 32123))
         {
         }
 

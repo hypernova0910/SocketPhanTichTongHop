@@ -120,7 +120,9 @@ namespace SocketServer
                                 var database = mgCon.GetDatabase("db_cecm");
                                 if (database != null)
                                 {
-                                    var collection = database.GetCollection<BsonDocument>("cecm_data");
+                                    var collection = database.GetCollection<InfoConnect>("cecm_data");
+                                    //var builder = Builders<InfoConnect>.Filter;
+                                    //var filter = builder.And();
                                     //var filter1 = Builders<InfoConnect>.Filter
                                     //.Gt(x => double.Parse(x.lat_value), boundary.minLat);
                                     //var filter2 = Builders<InfoConnect>.Filter
@@ -134,15 +136,15 @@ namespace SocketServer
                                     //var filter = filter1 & filter2 & filter3 & filter4 & filter5;
                                     //var filter = Builders<InfoConnect>.Filter.Eq(x => double.Parse(x.lat_value), boundary.minLat);
                                     //collection.Find()
-                                    var docs = collection.Find(new BsonDocument()).ToList();
-                                    foreach (BsonDocument doc in docs)
+                                    var docs = collection.Find(doc => true).ToList();
+                                    foreach (InfoConnect doc in docs)
                                     {
                                         Vertex vertex = new Vertex();
-                                        vertex.X = doc.GetValue("lat_value").AsDouble;
-                                        vertex.Y = doc.GetValue("long_value").AsDouble;
-                                        vertex.Z = doc.GetValue("the_value").AsDouble;
-                                        vertex.MachineCode = doc.GetValue("code").AsString;
-                                        vertex.BitSent = doc.GetValue("bit_sens").AsInt32;
+                                        vertex.X = doc.lat_value;
+                                        vertex.Y = doc.long_value;
+                                        vertex.Z = doc.the_value;
+                                        vertex.MachineCode = doc.code;
+                                        vertex.BitSent = doc.bit_sens;
                                         bool isCamCo = CheckCamCo(vertex.BitSent, out bool isButton1Press);
                                         if (
                                             vertex.X > boundary.minLat &&
@@ -157,7 +159,7 @@ namespace SocketServer
                                                 vertex.Type = Vertex.CAMCO;
                                                 lstCenter.Add(vertex);
                                             }
-                                            if(doc.GetValue("isMachineBom").AsBoolean)
+                                            if(doc.isMachineBom)
                                             {
                                                 lstInputBomb.Add(vertex);
                                             }

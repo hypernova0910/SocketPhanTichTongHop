@@ -37,7 +37,7 @@ namespace Delaunay
             //}
             //lstX.Sort();
             //lstY.Sort();
-            Console.WriteLine("Trước lọc: " + Set.Count);
+            Console.WriteLine("Trước lọc mine: " + Set.Count);
             if (Set != null)
             {
                 Set = Set.Where((vn) => vn.Z <= Z_MAX && vn.Z >= Z_MIN).ToList();
@@ -51,7 +51,7 @@ namespace Delaunay
                 return new List<Vertex>();
             }
             //Thread.Sleep(20000);
-            Console.WriteLine("Sau lọc: " + Set.Count);
+            Console.WriteLine("Sau lọc mine: " + Set.Count);
             //if ((Set != null && Set.Count < 50) || Set == null)
             //{
             //    return new List<Vertex>();

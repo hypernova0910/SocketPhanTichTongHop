@@ -137,8 +137,10 @@ namespace SocketServer
                                     //var filter = Builders<InfoConnect>.Filter.Eq(x => double.Parse(x.lat_value), boundary.minLat);
                                     //collection.Find()
                                     var docs = collection.Find(doc => true).ToList();
+                                    int count = 0;
                                     foreach (InfoConnect doc in docs)
                                     {
+                                        count++;
                                         Vertex vertex = new Vertex();
                                         vertex.X = doc.lat_value;
                                         vertex.Y = doc.long_value;
@@ -198,7 +200,9 @@ namespace SocketServer
                                     maxyRec = (float)boundary.maxLong;
                                 }
                                 List<Vertex> lst_bom = ptb.phanTichBomMin(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT);
+                                Console.WriteLine("lst_bom.Count: " + lst_bom.Count);
                                 List<Vertex> lst_min = ptm.phanTichBomMin(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT);
+                                Console.WriteLine("lst_min.Count: " + lst_min.Count);
                                 //Console.WriteLine("lstCenter.Count: " + lstCenter.Count);
                                 //Console.WriteLine("lst2.Count: " + lst_bom.Count);
                                 //foreach(Vertex vertex1 in lst_bom)

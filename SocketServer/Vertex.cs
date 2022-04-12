@@ -36,6 +36,7 @@ namespace gg.Mesh
             X = 0;
             Y = 0;
             Z = 0;
+            Type = Vertex.BOM;
             depth = 0;
         }
 
@@ -52,6 +53,7 @@ namespace gg.Mesh
             X = x;
             Y = y;
             Z = z;
+            Type = Vertex.BOM;
             depth = 0;
         }
 
@@ -61,6 +63,7 @@ namespace gg.Mesh
             Y = y;
             Z = z;
             depth = 0;
+            Type = Vertex.BOM;
             TypeBombMine = type;
         }
 

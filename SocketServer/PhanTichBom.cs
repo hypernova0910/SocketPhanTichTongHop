@@ -20,6 +20,8 @@ namespace Delaunay
         public static Double Z_MAX = 6.1;
         //KHOẢNG GIÁ TRỊ TỪ TRƯỜNG CHÊNH LỆCH MAX MIN
         public static Double INTERVAL_MAX_MIN = 0.1;
+        //THỜI GIAN TỐI ĐA ĐỂ PHÂN TÍCH
+        public static double MIN_TIME = 15;
 
         public PhanTichBom()
         {
@@ -27,6 +29,7 @@ namespace Delaunay
         }
         public List<Vertex> phanTichBomMin(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT)
         {
+            DateTime start_time = DateTime.Now;
             Console.WriteLine("khoangPT: " + khoangPT);
             //List<double> lstX = new List<double>();
             //List<double> lstY = new List<double>();
@@ -188,20 +191,24 @@ namespace Delaunay
                         flagTriangle = findPolygonTriangle(startTriangle, contourLineZ1, lstTriangleIntersecArea1, ref lstPolygonSub1);
 
                         triangleTemp = lstTriangleIntersecArea1;
-                        DateTime start_time = DateTime.Now;
+                        //DateTime start_time = DateTime.Now;
                         while (flagTriangle.Index != startTriangle.Index)
                         {
                             triangleTemp = lstTriangleIntersecArea1;
                             triangleTemp = removeTriagleFromList(triangleTemp, flagTriangle);
                             flagTriangle = findPolygonTriangle(flagTriangle, contourLineZ1, triangleTemp, ref lstPolygonSub1);
                             exitsTrianglePolygon.Add(flagTriangle);
-                            double time = DateTime.Now.Subtract(start_time).TotalSeconds;
-                            if (time > 30)
+                            //double time = DateTime.Now.Subtract(start_time).TotalSeconds;
+                            if (DateTime.Now.Subtract(start_time).TotalSeconds > MIN_TIME)
                             {
                                 break;
                             }
                         }
                         lstPolygonArea1.Add(lstPolygonSub1);
+                        if (DateTime.Now.Subtract(start_time).TotalSeconds > MIN_TIME)
+                        {
+                            break;
+                        }
                     }
                 }
             }
@@ -236,20 +243,28 @@ namespace Delaunay
                         startTriangle = lstTriangleIntersecArea2[i];
                         flagTriangle = findPolygonTriangle(startTriangle, contourLineZ2, lstTriangleIntersecArea2, ref lstPolygonSub2);
                         triangleTemp = lstTriangleIntersecArea2;
-                        DateTime start_time = DateTime.Now;
+                        //DateTime start_time = DateTime.Now;
                         while (flagTriangle.Index != startTriangle.Index)
                         {
                             triangleTemp = lstTriangleIntersecArea2;
                             triangleTemp = removeTriagleFromList(triangleTemp, flagTriangle);
                             flagTriangle = findPolygonTriangle(flagTriangle, contourLineZ2, triangleTemp, ref lstPolygonSub2);
                             exitsTrianglePolygon.Add(flagTriangle);
-                            double time = DateTime.Now.Subtract(start_time).TotalSeconds;
-                            if (time > 30)
+                            //double time = DateTime.Now.Subtract(start_time).TotalSeconds;
+                            //if (time > MIN_TIME)
+                            //{
+                            //    break;
+                            //}
+                            if (DateTime.Now.Subtract(start_time).TotalSeconds > MIN_TIME)
                             {
                                 break;
                             }
                         }
                         lstPolygonArea2.Add(lstPolygonSub2);
+                        if (DateTime.Now.Subtract(start_time).TotalSeconds > MIN_TIME)
+                        {
+                            break;
+                        }
                     }
                 }
                 //Console.WriteLine("Số polygon giao mặt 2 = " + lstPolygonArea2.Count);
@@ -753,18 +768,37 @@ namespace Delaunay
             //////}
         }
 
-        private Vertex findCenter(List<Vertex> polygon)
+        private Vertex findCenter(List<Vertex> poly)
         {
-            double tongX = 0;
-            double tongY = 0;
+            //double tongX = 0;
+            //double tongY = 0;
+            //double z = 0;
+            //foreach (var item in polygon)
+            //{
+            //    tongX += item.X;
+            //    tongY += item.Y;
+            //    z = item.Z;
+            //}
+            //return new Vertex(tongX / polygon.Count, tongY / polygon.Count, z, Vertex.TYPE_BOMB);
+            double accumulatedArea = 0.0f;
+            double centerX = 0.0f;
+            double centerY = 0.0f;
             double z = 0;
-            foreach (var item in polygon)
+
+            for (int i = 0, j = poly.Count - 1; i < poly.Count; j = i++)
             {
-                tongX += item.X;
-                tongY += item.Y;
-                z = item.Z;
+                double temp = poly[i].X * poly[j].Y - poly[j].X * poly[i].Y;
+                accumulatedArea += temp;
+                centerX += (poly[i].X + poly[j].X) * temp;
+                centerY += (poly[i].Y + poly[j].Y) * temp;
+                z = poly[i].Z;
             }
-            return new Vertex(tongX / polygon.Count, tongY / polygon.Count, z, Vertex.TYPE_BOMB);
+
+            if (Math.Abs(accumulatedArea) < 1E-7f)
+                return new Vertex(0, 0, 0, Vertex.TYPE_BOMB);  // Avoid division by zero
+
+            accumulatedArea *= 3f;
+            return new Vertex(centerX / accumulatedArea, centerY / accumulatedArea, z, Vertex.TYPE_BOMB);
         }
 
         //Tìm polygon theo tam giác liền kề

@@ -14,6 +14,8 @@ namespace Delaunay
         public double maxLat { get; set; }
         public double maxLong { get; set; }
 
+        public List<CecmProgramAreaLineDTO> lstRanhDo { get; set; }
+
         public DateTime timeSent { get; set; }
 
         public int khoangPT { get; set; }
@@ -25,6 +27,7 @@ namespace Delaunay
             maxLat = -1;
             maxLong = -1;
             khoangPT = 0;
+            lstRanhDo = new List<CecmProgramAreaLineDTO>();
         }
 
         public Boundary(double minLat_, double minLong_, double maxLat_, double maxLong_, int khoangPT_)
@@ -34,6 +37,7 @@ namespace Delaunay
             maxLat = maxLat_;
             maxLong = maxLong_;
             khoangPT = khoangPT_;
+            lstRanhDo = new List<CecmProgramAreaLineDTO>();
         }
     }
 }

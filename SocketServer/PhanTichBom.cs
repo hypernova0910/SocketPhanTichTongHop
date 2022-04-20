@@ -27,7 +27,7 @@ namespace Delaunay
         {
             Set = new List<Vertex>();
         }
-        public List<Vertex> phanTichBomMin(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT)
+        public List<Vertex> phanTichBom(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT)
         {
             DateTime start_time = DateTime.Now;
             Console.WriteLine("khoangPT: " + khoangPT);
@@ -40,21 +40,7 @@ namespace Delaunay
             //}
             //lstX.Sort();
             //lstY.Sort();
-            Console.WriteLine("Trước lọc bomb: " + Set.Count);
-            if (Set != null)
-            {
-                Set = Set.Where((vn) => vn.Z <= Z_MAX && vn.Z >= Z_MIN).ToList();
-                if(Set != null && Set.Count < MIN_POINT)
-                {
-                    return new List<Vertex>();
-                }  
-            }
-            else
-            {
-                return new List<Vertex>();
-            }
-            //Thread.Sleep(20000);
-            Console.WriteLine("Sau lọc bomb: " + Set.Count);
+            
             //if ((Set != null && Set.Count < 50) || Set == null)
             //{
             //    return new List<Vertex>();
@@ -768,37 +754,60 @@ namespace Delaunay
             //////}
         }
 
+        public List<Vertex> phanTichBomNew(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT, List<CecmProgramAreaLineDTO> lstRanhDo)
+        {
+            Console.WriteLine("Trước lọc bomb: " + Set.Count);
+            if (Set != null)
+            {
+                Set = Set.Where((vn) => vn.Z <= Z_MAX && vn.Z >= Z_MIN).ToList();
+                if (Set != null && Set.Count < MIN_POINT)
+                {
+                    return new List<Vertex>();
+                }
+            }
+            else
+            {
+                return new List<Vertex>();
+            }
+            Console.WriteLine("Sau lọc bomb: " + Set.Count);
+
+            //A Chính viết mới
+            Console.WriteLine("lstRanhDo.Count bom: " + lstRanhDo.Count);
+
+            return new List<Vertex>();
+        }
+
         private Vertex findCenter(List<Vertex> poly)
         {
-            //double tongX = 0;
-            //double tongY = 0;
-            //double z = 0;
-            //foreach (var item in polygon)
-            //{
-            //    tongX += item.X;
-            //    tongY += item.Y;
-            //    z = item.Z;
-            //}
-            //return new Vertex(tongX / polygon.Count, tongY / polygon.Count, z, Vertex.TYPE_BOMB);
-            double accumulatedArea = 0.0f;
-            double centerX = 0.0f;
-            double centerY = 0.0f;
+            double tongX = 0;
+            double tongY = 0;
             double z = 0;
-
-            for (int i = 0, j = poly.Count - 1; i < poly.Count; j = i++)
+            foreach (var item in poly)
             {
-                double temp = poly[i].X * poly[j].Y - poly[j].X * poly[i].Y;
-                accumulatedArea += temp;
-                centerX += (poly[i].X + poly[j].X) * temp;
-                centerY += (poly[i].Y + poly[j].Y) * temp;
-                z = poly[i].Z;
+                tongX += item.X;
+                tongY += item.Y;
+                z = item.Z;
             }
+            return new Vertex(tongX / poly.Count, tongY / poly.Count, z, Vertex.TYPE_BOMB);
+            //double accumulatedArea = 0.0f;
+            //double centerX = 0.0f;
+            //double centerY = 0.0f;
+            //double z = 0;
 
-            if (Math.Abs(accumulatedArea) < 1E-7f)
-                return new Vertex(0, 0, 0, Vertex.TYPE_BOMB);  // Avoid division by zero
+            //for (int i = 0, j = poly.Count - 1; i < poly.Count; j = i++)
+            //{
+            //    double temp = poly[i].X * poly[j].Y - poly[j].X * poly[i].Y;
+            //    accumulatedArea += temp;
+            //    centerX += (poly[i].X + poly[j].X) * temp;
+            //    centerY += (poly[i].Y + poly[j].Y) * temp;
+            //    z = poly[i].Z;
+            //}
 
-            accumulatedArea *= 3f;
-            return new Vertex(centerX / accumulatedArea, centerY / accumulatedArea, z, Vertex.TYPE_BOMB);
+            //if (Math.Abs(accumulatedArea) < 1E-7f)
+            //    return new Vertex(0, 0, 0, Vertex.TYPE_BOMB);  // Avoid division by zero
+
+            //accumulatedArea *= 3f;
+            //return new Vertex(centerX / accumulatedArea, centerY / accumulatedArea, z, Vertex.TYPE_BOMB);
         }
 
         //Tìm polygon theo tam giác liền kề

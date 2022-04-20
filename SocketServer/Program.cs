@@ -136,7 +136,11 @@ namespace SocketServer
                                     //var filter = filter1 & filter2 & filter3 & filter4 & filter5;
                                     //var filter = Builders<InfoConnect>.Filter.Eq(x => double.Parse(x.lat_value), boundary.minLat);
                                     //collection.Find()
-                                    var docs = collection.Find(doc => true).ToList();
+                                    var docs = collection.Find(
+                                        doc => doc.lat_value > boundary.minLat &&
+                                            doc.lat_value < boundary.maxLat &&
+                                            doc.long_value > boundary.minLong &&
+                                            doc.long_value > boundary.minLong).ToList();
                                     int count = 0;
                                     foreach (InfoConnect doc in docs)
                                     {
@@ -148,14 +152,14 @@ namespace SocketServer
                                         vertex.MachineCode = doc.code;
                                         vertex.BitSent = doc.bit_sens;
                                         bool isCamCo = CheckCamCo(vertex.BitSent, out bool isButton1Press);
-                                        if (
-                                            vertex.X > boundary.minLat &&
-                                            vertex.X < boundary.maxLat &&
-                                            vertex.Y > boundary.minLong &&
-                                            vertex.Y > boundary.minLong
-                                            //doc.GetValue("isMachineBom").AsBoolean == false
-                                        )
-                                        {
+                                        //if (
+                                        //    vertex.X > boundary.minLat &&
+                                        //    vertex.X < boundary.maxLat &&
+                                        //    vertex.Y > boundary.minLong &&
+                                        //    vertex.Y > boundary.minLong
+                                        //    //doc.GetValue("isMachineBom").AsBoolean == false
+                                        //)
+                                        //{
                                             if (isCamCo)
                                             {
                                                 vertex.Type = Vertex.CAMCO;
@@ -169,7 +173,7 @@ namespace SocketServer
                                             {
                                                 lstInputMine.Add(vertex);
                                             }
-                                        }
+                                        //}
                                         //lstInput.Add(vertex);
                                     }
 
@@ -199,16 +203,15 @@ namespace SocketServer
                                 {
                                     maxyRec = (float)boundary.maxLong;
                                 }
-                                List<Vertex> lst_bom = ptb.phanTichBomMin(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT);
+                                //List<Vertex> lst_bom = ptb.phanTichBom(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT);
+                                //Console.WriteLine("lst_bom.Count: " + lst_bom.Count);
+                                //List<Vertex> lst_min = ptm.phanTichMin(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT);
+                                //Console.WriteLine("lst_min.Count: " + lst_min.Count);
+                                List<Vertex> lst_bom = ptb.phanTichBomNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo);
                                 Console.WriteLine("lst_bom.Count: " + lst_bom.Count);
-                                List<Vertex> lst_min = ptm.phanTichBomMin(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT);
+                                List<Vertex> lst_min = ptm.phanTichMinNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo);
                                 Console.WriteLine("lst_min.Count: " + lst_min.Count);
-                                //Console.WriteLine("lstCenter.Count: " + lstCenter.Count);
-                                //Console.WriteLine("lst2.Count: " + lst_bom.Count);
-                                //foreach(Vertex vertex1 in lst_bom)
-                                //{
-                                //    Console.WriteLine(vertex1.X + " " + vertex1.Y);
-                                //}
+
                                 lstCenter.AddRange(lst_bom);
                                 lstCenter.AddRange(lst_min);
                                 Console.WriteLine("lstCenter.Count: " + lstCenter.Count);

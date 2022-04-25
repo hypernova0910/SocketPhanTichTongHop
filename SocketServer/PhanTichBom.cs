@@ -26,6 +26,8 @@ namespace Delaunay
         public static int DISTRIBUTION_COUNT = 500;
         //KHOẢNG DELTA XÁC ĐỊNH CÓ BOM
         public static double DELTA_STANDARD = 0.5;
+        //KHOẢNG BIẾN ĐỘNG XÁC NHẬN CÓ BOM
+        public static double M_DIS = 1.7;
 
         public PhanTichBom()
         {
@@ -780,8 +782,18 @@ namespace Delaunay
                 tongZToanO += item.Z;
             }
             double trungBinhZToanO = tongZToanO / Set.Count;
+            List<double> lstDoSau = new List<double>();
+            foreach (var vn in Set)
+            {
+                lstDoSau.Add(vn.Z);
+            }
+            lstDoSau.Sort();
+            double contourLineCao = (lstDoSau[lstDoSau.Count - 1] - ((lstDoSau[lstDoSau.Count - 1] - lstDoSau[0]) / 3) + lstDoSau[lstDoSau.Count - 1]) / 2;
+            contourLineCao = 1.5;
+            Console.WriteLine("contourLineCaocontourLineCaocontourLineCao  =  " + contourLineCao);
             List<Vertex> lstBom = new List<Vertex>();
             //A Chính viết mới
+            Console.WriteLine("(lstRanhDo(lstRanhDo(lstRanhDo(lstRanhDo " + lstRanhDo.Count);
             if(lstRanhDo != null && lstRanhDo.Count > 0)
             {
                 //Thử với rãnh dò 1
@@ -831,38 +843,67 @@ namespace Delaunay
                         bieuDoTungRanh.Add(vertexTmp);
                     }
 
-                    var markn = DISTRIBUTION_COUNT + 10;
-                    Vertex diem1 = new Vertex();
-                    Vertex diem2 = new Vertex();
-                    Vertex bomb = new Vertex();
-                    for (int h = 0; h < bieuDoTungRanh.Count; h++)
+                    List<double> lstZBieuDo = new List<double>();
+                    //Lấy đường trung bình trong từng rãnh
+                    foreach (var item in bieuDoTungRanh)
                     {
-                        //Console.WriteLine(bieuDoTungRanh[h].Z);
+                        lstZBieuDo.Add(item.Z);
+                    }
+                    double maxKhoang = 0;
+                    double minKhoang = 0;
+                    lstZBieuDo.Sort();
+                    if(lstZBieuDo != null)
+                    {
+                        maxKhoang = lstZBieuDo[lstZBieuDo.Count - 1];
+                        minKhoang = lstZBieuDo[0];
+                    }
+                    Console.WriteLine("RÃNH " + k + " MIN = " + minKhoang + "   MAX =  " + maxKhoang);
+                    //if (Math.Abs(minKhoang) > M_DIS || Math.Abs(maxKhoang) > M_DIS)
+                    //{
+                    //    //KHÔNG CÓ BOM
+                    //}
+                    //else
+                    {
+                        //KHOẢNG PHÂN TÍCH = 3
+                        double contourLine1 = minKhoang + ((maxKhoang - minKhoang) / 3);
+                        double contourLine2 = maxKhoang - ((maxKhoang - minKhoang) / 3);
 
-                        //Lấy điểm đầu tiên đi qua khoảng delta
-                        if (bieuDoTungRanh[h].Z > DELTA_STANDARD && markn == DISTRIBUTION_COUNT + 10)
+
+
+                        var markn = DISTRIBUTION_COUNT + 10;
+                        Vertex diem1 = new Vertex();
+                        Vertex diem2 = new Vertex();
+                        Vertex bomb = new Vertex();
+                        for (int h = 0; h < bieuDoTungRanh.Count; h++)
                         {
-                            markn = h;
-                            diem1 = bieuDoTungRanh[h];
-                        }
-                        //Lấy điểm xuống ngay sau điểm lên đó
-                        if (bieuDoTungRanh[h].Z < DELTA_STANDARD && h > markn && diem1 != new Vertex())
-                        {
-                            diem2 = bieuDoTungRanh[h];
-                            if (diem1 != new Vertex() && diem2 != new Vertex())
+                            //Console.WriteLine(bieuDoTungRanh[h].Z);
+
+                            //Lấy điểm đầu tiên đi qua khoảng delta
+                            if (bieuDoTungRanh[h].Z > DELTA_STANDARD && markn == DISTRIBUTION_COUNT + 10)
                             {
-                                bomb.X = (diem1.X + diem2.X) / 2;
-                                bomb.Y = (diem1.Y + diem2.Y) / 2;
-                                bomb.Z = DELTA_STANDARD;
-                                lstBom.Add(bomb);
-                                diem1 = new Vertex();
-                                diem2 = new Vertex();
-                                bomb = new Vertex();
-                                markn = DISTRIBUTION_COUNT + 10;
+                                markn = h;
+                                diem1 = bieuDoTungRanh[h];
                             }
-                            
+                            //Lấy điểm xuống ngay sau điểm lên đó
+                            if (bieuDoTungRanh[h].Z < DELTA_STANDARD && h > markn && diem1 != new Vertex())
+                            {
+                                diem2 = bieuDoTungRanh[h];
+                                if (diem1 != new Vertex() && diem2 != new Vertex())
+                                {
+                                    bomb.X = (diem1.X + diem2.X) / 2;
+                                    bomb.Y = (diem1.Y + diem2.Y) / 2;
+                                    bomb.Z = DELTA_STANDARD;
+                                    lstBom.Add(bomb);
+                                    diem1 = new Vertex();
+                                    diem2 = new Vertex();
+                                    bomb = new Vertex();
+                                    markn = DISTRIBUTION_COUNT + 10;
+                                }
+
+                            }
                         }
                     }
+
                 }
             }
             Console.WriteLine("SO BOM = " + lstBom.Count);

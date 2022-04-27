@@ -25,9 +25,9 @@ namespace Delaunay
         //KHOẢNG CHIA BIỂU ĐỒ MỖI RÃNH DÒ
         public static int DISTRIBUTION_COUNT = 500;
         //KHOẢNG DELTA XÁC ĐỊNH CÓ BOM
-        public static double DELTA_STANDARD = 0.5;
+        public static double DELTA_STANDARD = 8;
         //KHOẢNG BIẾN ĐỘNG XÁC NHẬN CÓ BOM
-        public static double M_DIS = 0.5;
+        public static double M_DIS = 8;
 
         public PhanTichMin()
         {
@@ -808,7 +808,7 @@ namespace Delaunay
                 {
                     List<Vertex> bieuDoTungRanh = new List<Vertex>();
                     ranhDoTrai = lstRanhDo[k];
-                    ranhDoPhai = lstRanhDo[k + 1];
+                    ranhDoPhai = lstRanhDo[k+1];
                     double khoangCach = Math.Sqrt((ranhDoTrai.end_x - ranhDoTrai.start_x) * (ranhDoTrai.end_x - ranhDoTrai.start_x) + (ranhDoTrai.end_y - ranhDoTrai.start_y) * (ranhDoTrai.end_y - ranhDoTrai.start_y));
                     //Mỗi rãnh chia làm DISTRIBUTION_COUNT khoảng
                     double khoangChiaThucTe = khoangCach / DISTRIBUTION_COUNT;
@@ -848,12 +848,15 @@ namespace Delaunay
                     }
 
                     List<double> lstZBieuDo = new List<double>();
+                    Console.WriteLine("------------------------------------------------------");
                     foreach (var item in bieuDoTungRanh)
                     {
+                        //Console.WriteLine(item.Z);
                         lstZBieuDo.Add(item.Z);
                         item.Z = Math.Abs(item.Z);
-                        Console.WriteLine("Z=  " + item.Z);
+                        //Console.WriteLine("Z=  " + item.Z);
                     }
+                    Console.WriteLine("------------------------------------------------------");
                     double maxKhoang = 0;
                     double minKhoang = 0;
                     lstZBieuDo.Sort();
@@ -919,7 +922,7 @@ namespace Delaunay
             {
                 item.TypeBombMine = Vertex.TYPE_MINE;
             }
-            return new List<Vertex>();
+            return lstBom;
         }
 
         private Vertex findCenter(List<Vertex> poly)

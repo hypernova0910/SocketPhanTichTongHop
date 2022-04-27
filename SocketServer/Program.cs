@@ -3,6 +3,8 @@ using gg.Mesh;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
+using SocketServer.HierarchicalClusteringUtils;
+using SocketServer.KMeanCluster;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -209,11 +211,37 @@ namespace SocketServer
                                 //Console.WriteLine("lst_min.Count: " + lst_min.Count);
                                 List<Vertex> lst_bom = ptb.phanTichBomNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo);
                                 Console.WriteLine("lst_bom.Count: " + lst_bom.Count);
+                                if (lst_bom.Count > 0)
+                                {
+                                    lst_bom = HierarchicalClustering.Cluster(lst_bom, Vertex.TYPE_BOMB);
+                                }
                                 List<Vertex> lst_min = ptm.phanTichMinNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo);
                                 Console.WriteLine("lst_min.Count: " + lst_min.Count);
+                                if (lst_min.Count > 0)
+                                {
+                                    lst_min = HierarchicalClustering.Cluster(lst_min, Vertex.TYPE_MINE);
+                                }
+                                List<Vertex> lstKQPT = new List<Vertex>();
+                                lstKQPT.AddRange(lst_bom);
+                                lstKQPT.AddRange(lst_min);
 
-                                lstCenter.AddRange(lst_bom);
-                                lstCenter.AddRange(lst_min);
+                                //if (lstKQPT.Count > 0)
+                                //{
+                                //    lstKQPT = KMeanCluster2.Cluster(lstKQPT, 3);
+                                //}
+                                //else
+                                //{
+                                //    Console.WriteLine("Kết quả phân tích trống");
+                                //}
+                                //if (lstKQPT.Count > 0)
+                                //{
+                                //    lstKQPT = HierarchicalClustering.Cluster(lstKQPT);
+                                //}
+                                //else
+                                //{
+                                //    Console.WriteLine("Kết quả phân tích trống");
+                                //}
+                                lstCenter.AddRange(lstKQPT);
                                 Console.WriteLine("lstCenter.Count: " + lstCenter.Count);
                                 string json = JsonConvert.SerializeObject(lstCenter);
                                 server.Reply(json, received.Sender);

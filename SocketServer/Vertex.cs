@@ -21,7 +21,7 @@ namespace gg.Mesh
     /// <summary>
     /// Vertex class
     /// </summary>
-    public class Vertex
+    public class Vertex : IComparable<Vertex>
     {
         public static int BOM = 1;
         public static int CAMCO = 2;
@@ -38,6 +38,7 @@ namespace gg.Mesh
             Z = 0;
             Type = Vertex.BOM;
             depth = 0;
+            id = Guid.NewGuid().ToString();
         }
 
         /// <summary>
@@ -55,6 +56,7 @@ namespace gg.Mesh
             Z = z;
             Type = Vertex.BOM;
             depth = 0;
+            id = Guid.NewGuid().ToString();
         }
 
         public Vertex(double x, double y, double z, int type)
@@ -65,6 +67,7 @@ namespace gg.Mesh
             depth = 0;
             Type = Vertex.BOM;
             TypeBombMine = type;
+            id = Guid.NewGuid().ToString();
         }
 
         /// <summary>
@@ -96,6 +99,8 @@ namespace gg.Mesh
         public int BitSent { get; set; }
 
         public string MachineCode { get; set; }
+
+        public string id { get; set; }
 
         /// <summary>
         /// Delta distance squared between this and other vertex t
@@ -163,6 +168,11 @@ namespace gg.Mesh
         public override string ToString()
         {
             return X + ", " + Y + ", " + Z;
+        }
+
+        public int CompareTo(Vertex other)
+        {
+            return string.Compare(this.id, other.id);
         }
     }
 }

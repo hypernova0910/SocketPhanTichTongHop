@@ -27,7 +27,7 @@ namespace Delaunay
         //KHOẢNG DELTA XÁC ĐỊNH CÓ BOM
         public static double DELTA_STANDARD = 0.5;
         //KHOẢNG BIẾN ĐỘNG XÁC NHẬN CÓ BOM
-        public static double M_DIS = 1.7;
+        public static double M_DIS = 0.5;
 
         public PhanTichBom()
         {
@@ -789,11 +789,10 @@ namespace Delaunay
             }
             lstDoSau.Sort();
             double contourLineCao = (lstDoSau[lstDoSau.Count - 1] - ((lstDoSau[lstDoSau.Count - 1] - lstDoSau[0]) / 3) + lstDoSau[lstDoSau.Count - 1]) / 2;
-            contourLineCao = 1.5;
+            contourLineCao = 0.501;
             Console.WriteLine("contourLineCaocontourLineCaocontourLineCao  =  " + contourLineCao);
             List<Vertex> lstBom = new List<Vertex>();
             //A Chính viết mới
-            Console.WriteLine("(lstRanhDo(lstRanhDo(lstRanhDo(lstRanhDo " + lstRanhDo.Count);
             if(lstRanhDo != null && lstRanhDo.Count > 0)
             {
                 //Thử với rãnh dò 1
@@ -842,12 +841,13 @@ namespace Delaunay
                         vertexTmp.Z = z_temp;
                         bieuDoTungRanh.Add(vertexTmp);
                     }
-
+                    
                     List<double> lstZBieuDo = new List<double>();
-                    //Lấy đường trung bình trong từng rãnh
                     foreach (var item in bieuDoTungRanh)
                     {
                         lstZBieuDo.Add(item.Z);
+                        item.Z = Math.Abs(item.Z);
+                        Console.WriteLine("Z=  " + item.Z);
                     }
                     double maxKhoang = 0;
                     double minKhoang = 0;
@@ -856,19 +856,22 @@ namespace Delaunay
                     {
                         maxKhoang = lstZBieuDo[lstZBieuDo.Count - 1];
                         minKhoang = lstZBieuDo[0];
-                    }
-                    Console.WriteLine("RÃNH " + k + " MIN = " + minKhoang + "   MAX =  " + maxKhoang);
-                    //if (Math.Abs(minKhoang) > M_DIS || Math.Abs(maxKhoang) > M_DIS)
-                    //{
-                    //    //KHÔNG CÓ BOM
-                    //}
-                    //else
+                    };
+
+                    if (Math.Abs(minKhoang) < M_DIS && Math.Abs(maxKhoang) < M_DIS)
                     {
+                        //Console.WriteLine("RÃNH " + k + "KHÔNG CÓ BOM");
+                    }
+                    else
+                    {
+                        //Lấy đường trung bình trong từng rãnh
+                        //foreach (var item in bieuDoTungRanh)
+                        //{
+                            
+                        //}
                         //KHOẢNG PHÂN TÍCH = 3
                         double contourLine1 = minKhoang + ((maxKhoang - minKhoang) / 3);
                         double contourLine2 = maxKhoang - ((maxKhoang - minKhoang) / 3);
-
-
 
                         var markn = DISTRIBUTION_COUNT + 10;
                         Vertex diem1 = new Vertex();
@@ -909,7 +912,7 @@ namespace Delaunay
             Console.WriteLine("SO BOM = " + lstBom.Count);
             foreach(var item in lstBom)
             {
-                Console.WriteLine("BOMB  == " + item.ToString());
+                item.TypeBombMine = Vertex.TYPE_BOMB;
             }
             return  lstBom;
         }

@@ -22,6 +22,12 @@ namespace Delaunay
         public static Double INTERVAL_MAX_MIN = 0.1;
         //THỜI GIAN TỐI ĐA ĐỂ PHÂN TÍHC
         public static double MIN_TIME = 15;
+        //KHOẢNG CHIA BIỂU ĐỒ MỖI RÃNH DÒ
+        public static int DISTRIBUTION_COUNT = 500;
+        //KHOẢNG DELTA XÁC ĐỊNH CÓ BOM
+        public static double DELTA_STANDARD = 0.5;
+        //KHOẢNG BIẾN ĐỘNG XÁC NHẬN CÓ BOM
+        public static double M_DIS = 0.5;
 
         public PhanTichMin()
         {
@@ -773,6 +779,7 @@ namespace Delaunay
 
         public List<Vertex> phanTichMinNew(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT, List<CecmProgramAreaLineDTO> lstRanhDo)
         {
+            List<Vertex> lstBom = new List<Vertex>();
             Console.WriteLine("Trước lọc mine: " + Set.Count);
             if (Set != null)
             {
@@ -791,7 +798,127 @@ namespace Delaunay
 
             //A Chính viết mới
             Console.WriteLine("lstRanhDo.Count min: " + lstRanhDo.Count);
+            if (lstRanhDo != null && lstRanhDo.Count > 0)
+            {
+                //Thử với rãnh dò 1
+                CecmProgramAreaLineDTO ranhDoTrai = new CecmProgramAreaLineDTO();
+                CecmProgramAreaLineDTO ranhDoPhai = new CecmProgramAreaLineDTO();
 
+                for (int k = 0; k < lstRanhDo.Count - 1; k++)
+                {
+                    List<Vertex> bieuDoTungRanh = new List<Vertex>();
+                    ranhDoTrai = lstRanhDo[k];
+                    ranhDoPhai = lstRanhDo[k + 1];
+                    double khoangCach = Math.Sqrt((ranhDoTrai.end_x - ranhDoTrai.start_x) * (ranhDoTrai.end_x - ranhDoTrai.start_x) + (ranhDoTrai.end_y - ranhDoTrai.start_y) * (ranhDoTrai.end_y - ranhDoTrai.start_y));
+                    //Mỗi rãnh chia làm DISTRIBUTION_COUNT khoảng
+                    double khoangChiaThucTe = khoangCach / DISTRIBUTION_COUNT;
+                    for (int i = 1; i <= DISTRIBUTION_COUNT; i++)
+                    {
+                        double max_x = ranhDoPhai.start_x;
+                        double min_x = ranhDoTrai.start_x;
+                        double min_y = ranhDoTrai.start_y + (i - 1) * khoangChiaThucTe;
+                        double max_y = ranhDoTrai.start_y + i * khoangChiaThucTe;
+
+                        //Lấy điểm thứ i đại diện cho khoảng
+                        Vertex vertexTmp = new Vertex();
+                        vertexTmp.X = (ranhDoTrai.start_x + ranhDoPhai.start_x) / 2;
+                        vertexTmp.Y = max_y;
+                        //Tính Z tại điểm thứ i -> Tìm tất cả các điểm đo trong khoảng i sau đó lấy trung bình
+                        double z_temp = 0;
+                        int soDiemThuocKhoang = 0;
+                        double tongZ = 0;
+                        foreach (var item in Set)
+                        {
+                            if (item.X >= min_x && item.X < max_x && item.Y >= min_y && item.Y <= max_y)
+                            {
+                                tongZ += item.Z;
+                                soDiemThuocKhoang++;
+                            }
+                        }
+                        if (soDiemThuocKhoang > 0 && tongZ != 0)
+                        {
+                            z_temp = tongZ / soDiemThuocKhoang;
+                        }
+                        if (bieuDoTungRanh != null && bieuDoTungRanh.Count > 0 && z_temp == 0)
+                        {
+                            z_temp = bieuDoTungRanh[bieuDoTungRanh.Count - 1].Z;
+                        }
+                        vertexTmp.Z = z_temp;
+                        bieuDoTungRanh.Add(vertexTmp);
+                    }
+
+                    List<double> lstZBieuDo = new List<double>();
+                    foreach (var item in bieuDoTungRanh)
+                    {
+                        lstZBieuDo.Add(item.Z);
+                        item.Z = Math.Abs(item.Z);
+                        Console.WriteLine("Z=  " + item.Z);
+                    }
+                    double maxKhoang = 0;
+                    double minKhoang = 0;
+                    lstZBieuDo.Sort();
+                    if (lstZBieuDo != null)
+                    {
+                        maxKhoang = lstZBieuDo[lstZBieuDo.Count - 1];
+                        minKhoang = lstZBieuDo[0];
+                    };
+
+                    if (Math.Abs(minKhoang) < M_DIS && Math.Abs(maxKhoang) < M_DIS)
+                    {
+                        //Console.WriteLine("RÃNH " + k + "KHÔNG CÓ BOM");
+                    }
+                    else
+                    {
+                        //Lấy đường trung bình trong từng rãnh
+                        //foreach (var item in bieuDoTungRanh)
+                        //{
+
+                        //}
+                        //KHOẢNG PHÂN TÍCH = 3
+                        double contourLine1 = minKhoang + ((maxKhoang - minKhoang) / 3);
+                        double contourLine2 = maxKhoang - ((maxKhoang - minKhoang) / 3);
+
+                        var markn = DISTRIBUTION_COUNT + 10;
+                        Vertex diem1 = new Vertex();
+                        Vertex diem2 = new Vertex();
+                        Vertex bomb = new Vertex();
+                        for (int h = 0; h < bieuDoTungRanh.Count; h++)
+                        {
+                            //Console.WriteLine(bieuDoTungRanh[h].Z);
+
+                            //Lấy điểm đầu tiên đi qua khoảng delta
+                            if (bieuDoTungRanh[h].Z > DELTA_STANDARD && markn == DISTRIBUTION_COUNT + 10)
+                            {
+                                markn = h;
+                                diem1 = bieuDoTungRanh[h];
+                            }
+                            //Lấy điểm xuống ngay sau điểm lên đó
+                            if (bieuDoTungRanh[h].Z < DELTA_STANDARD && h > markn && diem1 != new Vertex())
+                            {
+                                diem2 = bieuDoTungRanh[h];
+                                if (diem1 != new Vertex() && diem2 != new Vertex())
+                                {
+                                    bomb.X = (diem1.X + diem2.X) / 2;
+                                    bomb.Y = (diem1.Y + diem2.Y) / 2;
+                                    bomb.Z = DELTA_STANDARD;
+                                    lstBom.Add(bomb);
+                                    diem1 = new Vertex();
+                                    diem2 = new Vertex();
+                                    bomb = new Vertex();
+                                    markn = DISTRIBUTION_COUNT + 10;
+                                }
+
+                            }
+                        }
+                    }
+
+                }
+            }
+            Console.WriteLine("SO MIN = " + lstBom.Count);
+            foreach (var item in lstBom)
+            {
+                item.TypeBombMine = Vertex.TYPE_MINE;
+            }
             return new List<Vertex>();
         }
 

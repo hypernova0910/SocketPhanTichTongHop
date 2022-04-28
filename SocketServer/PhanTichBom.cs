@@ -25,9 +25,9 @@ namespace Delaunay
         //KHOẢNG CHIA BIỂU ĐỒ MỖI RÃNH DÒ
         public static int DISTRIBUTION_COUNT = 500;
         //KHOẢNG DELTA XÁC ĐỊNH CÓ BOM
-        public static double DELTA_STANDARD = 0.5;
+        public static double DELTA_STANDARD = 1;
         //KHOẢNG BIẾN ĐỘNG XÁC NHẬN CÓ BOM
-        public static double M_DIS = 0.5;
+        public static double M_DIS = 1;
 
         public PhanTichBom()
         {
@@ -836,7 +836,8 @@ namespace Delaunay
                         }
                         if (bieuDoTungRanh != null && bieuDoTungRanh.Count > 0 && z_temp == 0)
                         {
-                            z_temp = bieuDoTungRanh[bieuDoTungRanh.Count - 1].Z;
+                            //z_temp = bieuDoTungRanh[bieuDoTungRanh.Count - 1].Z;
+                            z_temp = 0;
                         }
                         vertexTmp.Z = z_temp;
                         bieuDoTungRanh.Add(vertexTmp);
@@ -847,7 +848,7 @@ namespace Delaunay
                     {
                         lstZBieuDo.Add(item.Z);
                         item.Z = Math.Abs(item.Z);
-                        Console.WriteLine("Z=  " + item.Z);
+                        //Console.WriteLine("Z=  " + item.Z);
                     }
                     double maxKhoang = 0;
                     double minKhoang = 0;

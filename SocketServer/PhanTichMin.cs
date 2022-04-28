@@ -841,7 +841,8 @@ namespace Delaunay
                         }
                         if (bieuDoTungRanh != null && bieuDoTungRanh.Count > 0 && z_temp == 0)
                         {
-                            z_temp = bieuDoTungRanh[bieuDoTungRanh.Count - 1].Z;
+                            //z_temp = bieuDoTungRanh[bieuDoTungRanh.Count - 1].Z;
+                            z_temp = 0;
                         }
                         vertexTmp.Z = z_temp;
                         bieuDoTungRanh.Add(vertexTmp);

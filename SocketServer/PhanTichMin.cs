@@ -777,8 +777,9 @@ namespace Delaunay
             //////}
         }
 
-        public List<Vertex> phanTichMinNew(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT, List<CecmProgramAreaLineDTO> lstRanhDo)
+        public List<Vertex> phanTichMinNew(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT, List<CecmProgramAreaLineDTO> lstRanhDo, double nguong)
         {
+            Console.WriteLine("Nguong min: " + nguong);
             List<Vertex> lstBom = new List<Vertex>();
             Console.WriteLine("Trước lọc mine: " + Set.Count);
             if (Set != null)

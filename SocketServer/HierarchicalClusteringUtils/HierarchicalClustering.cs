@@ -28,9 +28,10 @@ namespace SocketServer.HierarchicalClusteringUtils
         }
 
 
-        public static List<Vertex> Cluster(List<Vertex> vertices, int typeBombMine = 0)
+        public static List<Vertex> Cluster(List<Vertex> vertices, int minClusterSize, int typeBombMine = 0, int typeBomCamCo = Vertex.BOM)
         {
             Console.WriteLine("=========================== HierarchicalClustering ===========================");
+            Console.WriteLine("minClusterSize: " + minClusterSize);
             List<Vertex> result = new List<Vertex>();
             
             var metric = new DissimilarityMetric();
@@ -59,9 +60,13 @@ namespace SocketServer.HierarchicalClusteringUtils
                 }
                 foreach (Cluster<Vertex> cluster in clusterSet)
                 {
-                    Vertex vertex = GetCentroid(cluster.ToList());
-                    vertex.TypeBombMine = typeBombMine;
-                    result.Add(vertex);
+                    if(cluster.Count >= minClusterSize)
+                    {
+                        Vertex vertex = GetCentroid(cluster.ToList());
+                        vertex.TypeBombMine = typeBombMine;
+                        vertex.Type = typeBomCamCo;
+                        result.Add(vertex);
+                    }
                 }
             }
             

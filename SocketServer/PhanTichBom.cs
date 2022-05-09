@@ -760,8 +760,9 @@ namespace Delaunay
             //////}
         }
 
-        public List<Vertex> phanTichBomNew(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT, List<CecmProgramAreaLineDTO> lstRanhDo)
+        public List<Vertex> phanTichBomNew(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT, List<CecmProgramAreaLineDTO> lstRanhDo, double nguong)
         {
+            Console.WriteLine("Nguong bom: " + nguong);
             Console.WriteLine("Trước lọc bomb: " + Set.Count);
             if (Set != null)
             {

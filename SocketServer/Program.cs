@@ -178,7 +178,10 @@ namespace SocketServer
                                         //}
                                         //lstInput.Add(vertex);
                                     }
-
+                                    if (lstCenter.Count > 0)
+                                    {
+                                        lstCenter = HierarchicalClustering.Cluster(lstCenter, 1, 0, Vertex.CAMCO);
+                                    }
                                     //collection.InsertOne(document);
                                 }
                                 //List<Vertex> lstPolygonInput = JsonConvert.DeserializeObject<List<Vertex>>(received.Message);
@@ -209,38 +212,22 @@ namespace SocketServer
                                 //Console.WriteLine("lst_bom.Count: " + lst_bom.Count);
                                 //List<Vertex> lst_min = ptm.phanTichMin(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT);
                                 //Console.WriteLine("lst_min.Count: " + lst_min.Count);
-                                List<Vertex> lst_bom = ptb.phanTichBomNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo);
+                                List<Vertex> lst_bom = ptb.phanTichBomNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo, boundary.nguongBom);
                                 Console.WriteLine("lst_bom.Count: " + lst_bom.Count);
                                 if (lst_bom.Count > 0)
                                 {
-                                    lst_bom = HierarchicalClustering.Cluster(lst_bom, Vertex.TYPE_BOMB);
+                                    lst_bom = HierarchicalClustering.Cluster(lst_bom, boundary.minClusterSize, Vertex.TYPE_BOMB);
                                 }
-                                List<Vertex> lst_min = ptm.phanTichMinNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo);
+                                List<Vertex> lst_min = ptm.phanTichMinNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo, boundary.nguongMin);
                                 Console.WriteLine("lst_min.Count: " + lst_min.Count);
                                 if (lst_min.Count > 0)
                                 {
-                                    lst_min = HierarchicalClustering.Cluster(lst_min, Vertex.TYPE_MINE);
+                                    lst_min = HierarchicalClustering.Cluster(lst_min, boundary.minClusterSize, Vertex.TYPE_MINE);
                                 }
                                 List<Vertex> lstKQPT = new List<Vertex>();
                                 lstKQPT.AddRange(lst_bom);
                                 lstKQPT.AddRange(lst_min);
 
-                                //if (lstKQPT.Count > 0)
-                                //{
-                                //    lstKQPT = KMeanCluster2.Cluster(lstKQPT, 3);
-                                //}
-                                //else
-                                //{
-                                //    Console.WriteLine("Kết quả phân tích trống");
-                                //}
-                                //if (lstKQPT.Count > 0)
-                                //{
-                                //    lstKQPT = HierarchicalClustering.Cluster(lstKQPT);
-                                //}
-                                //else
-                                //{
-                                //    Console.WriteLine("Kết quả phân tích trống");
-                                //}
                                 lstCenter.AddRange(lstKQPT);
                                 Console.WriteLine("lstCenter.Count: " + lstCenter.Count);
                                 string json = JsonConvert.SerializeObject(lstCenter);

@@ -20,6 +20,10 @@ namespace Delaunay
 
         public int khoangPT { get; set; }
 
+        public double nguongBom { get; set; }
+        public double nguongMin { get; set; }
+        public int minClusterSize { get; set; }
+
         public Boundary()
         {
             minLat = -1;

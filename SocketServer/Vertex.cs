@@ -23,8 +23,8 @@ namespace gg.Mesh
     /// </summary>
     public class Vertex : IComparable<Vertex>
     {
-        public static int BOM = 1;
-        public static int CAMCO = 2;
+        public const int BOM = 1;
+        public const int CAMCO = 2;
 
         public static int TYPE_BOMB = 1;
         public static int TYPE_MINE = 2;

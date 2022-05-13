@@ -13,7 +13,7 @@ namespace Delaunay
         public List<Vertex> Set;
 
         //SỐ LƯỢNG ĐIỂM TỐI THIỂU PHÂN TÍCH
-        public static int MIN_POINT = 200;
+        public static int MIN_POINT = 150;
         //KHOẢNG GIÁ TRỊ TỪ TRƯỜNG NHỎ NHẤT
         public static Double Z_MIN = 0;
         //KHOẢNG GIÁ TRỊ TỪ TRƯỜNG LỚN NHẤT

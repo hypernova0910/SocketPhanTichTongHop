@@ -13,7 +13,7 @@ namespace Delaunay
         public List<Vertex> Set;
 
         //SỐ LƯỢNG ĐIỂM TỐI THIỂU PHÂN TÍCH
-        public static int MIN_POINT = 200;
+        public static int MIN_POINT = 150;
         //KHOẢNG GIÁ TRỊ TỪ TRƯỜNG NHỎ NHẤT
         public static Double Z_MIN = -6.1;
         //KHOẢNG GIÁ TRỊ TỪ TRƯỜNG LỚN NHẤT
@@ -860,7 +860,7 @@ namespace Delaunay
                         minKhoang = lstZBieuDo[0];
                     };
 
-                    if (Math.Abs(minKhoang) < M_DIS && Math.Abs(maxKhoang) < M_DIS)
+                    if (Math.Abs(minKhoang) < 3 && Math.Abs(maxKhoang) < 3)
                     {
                         //Console.WriteLine("RÃNH " + k + "KHÔNG CÓ BOM");
                     }
@@ -884,20 +884,20 @@ namespace Delaunay
                             //Console.WriteLine(bieuDoTungRanh[h].Z);
 
                             //Lấy điểm đầu tiên đi qua khoảng delta
-                            if (bieuDoTungRanh[h].Z > nguong && markn == DISTRIBUTION_COUNT + 10)
+                            if (bieuDoTungRanh[h].Z > 3 && markn == DISTRIBUTION_COUNT + 10)
                             {
                                 markn = h;
                                 diem1 = bieuDoTungRanh[h];
                             }
                             //Lấy điểm xuống ngay sau điểm lên đó
-                            if (bieuDoTungRanh[h].Z < nguong && h > markn && diem1 != new Vertex())
+                            if (bieuDoTungRanh[h].Z < 3 && h > markn && diem1 != new Vertex())
                             {
                                 diem2 = bieuDoTungRanh[h];
                                 if (diem1 != new Vertex() && diem2 != new Vertex())
                                 {
                                     bomb.X = (diem1.X + diem2.X) / 2;
                                     bomb.Y = (diem1.Y + diem2.Y) / 2;
-                                    bomb.Z = DELTA_STANDARD;
+                                    bomb.Z = 2;
                                     lstBom.Add(bomb);
                                     diem1 = new Vertex();
                                     diem2 = new Vertex();

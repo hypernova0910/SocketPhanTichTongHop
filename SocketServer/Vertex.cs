@@ -39,6 +39,7 @@ namespace gg.Mesh
             Type = Vertex.BOM;
             depth = 0;
             id = Guid.NewGuid().ToString();
+            MachineCode = "";
         }
 
         /// <summary>
@@ -57,6 +58,7 @@ namespace gg.Mesh
             Type = Vertex.BOM;
             depth = 0;
             id = Guid.NewGuid().ToString();
+            MachineCode = "";
         }
 
         public Vertex(double x, double y, double z, int type)
@@ -68,6 +70,7 @@ namespace gg.Mesh
             Type = Vertex.BOM;
             TypeBombMine = type;
             id = Guid.NewGuid().ToString();
+            MachineCode = "";
         }
 
         /// <summary>

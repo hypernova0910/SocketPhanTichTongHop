@@ -25,9 +25,11 @@ namespace gg.Mesh
     {
         public const int BOM = 1;
         public const int CAMCO = 2;
+        public const int BOM_CAMCO = 3;
 
         public static int TYPE_BOMB = 1;
         public static int TYPE_MINE = 2;
+        public static int TYPE_BOMB_MINE = 3;
         /// <summary>
         /// Vertex default constructor.
         /// </summary>

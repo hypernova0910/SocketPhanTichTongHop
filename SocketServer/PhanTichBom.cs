@@ -884,13 +884,13 @@ namespace Delaunay
                             //Console.WriteLine(bieuDoTungRanh[h].Z);
 
                             //Lấy điểm đầu tiên đi qua khoảng delta
-                            if (bieuDoTungRanh[h].Z > 3 && markn == DISTRIBUTION_COUNT + 10)
+                            if (bieuDoTungRanh[h].Z > nguong && markn == DISTRIBUTION_COUNT + 10)
                             {
                                 markn = h;
                                 diem1 = bieuDoTungRanh[h];
                             }
                             //Lấy điểm xuống ngay sau điểm lên đó
-                            if (bieuDoTungRanh[h].Z < 3 && h > markn && diem1 != new Vertex())
+                            if (bieuDoTungRanh[h].Z < nguong && h > markn && diem1 != new Vertex())
                             {
                                 diem2 = bieuDoTungRanh[h];
                                 if (diem1 != new Vertex() && diem2 != new Vertex())

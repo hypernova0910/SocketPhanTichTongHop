@@ -229,6 +229,7 @@ namespace SocketServer
                                 lstKQPT.AddRange(lst_min);
 
                                 lstCenter.AddRange(lstKQPT);
+                                lstCenter = HierarchicalClustering.ClusterAll(lstCenter);
                                 Console.WriteLine("lstCenter.Count: " + lstCenter.Count);
                                 string json = JsonConvert.SerializeObject(lstCenter);
                                 server.Reply(json, received.Sender);

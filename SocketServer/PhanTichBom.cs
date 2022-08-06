@@ -23,7 +23,7 @@ namespace Delaunay
         //THỜI GIAN TỐI ĐA ĐỂ PHÂN TÍCH
         public static double MIN_TIME = 15;
         //KHOẢNG CHIA BIỂU ĐỒ MỖI RÃNH DÒ
-        public static int DISTRIBUTION_COUNT = 500;
+        public static int DISTRIBUTION_COUNT = 250;
         //KHOẢNG DELTA XÁC ĐỊNH CÓ BOM
         public static double DELTA_STANDARD = 1;
         //KHOẢNG BIẾN ĐỘNG XÁC NHẬN CÓ BOM

@@ -850,7 +850,7 @@ namespace Delaunay
                     }
 
                     List<double> lstZBieuDo = new List<double>();
-                    Console.WriteLine("------------------------------------------------------");
+                    //Console.WriteLine("------------------------------------------------------");
                     foreach (var item in bieuDoTungRanh)
                     {
                         //Console.WriteLine(item.Z);
@@ -858,7 +858,7 @@ namespace Delaunay
                         item.Z = Math.Abs(item.Z);
                         //Console.WriteLine("Z=  " + item.Z);
                     }
-                    Console.WriteLine("------------------------------------------------------");
+                    //Console.WriteLine("------------------------------------------------------");
                     double maxKhoang = 0;
                     double minKhoang = 0;
                     lstZBieuDo.Sort();

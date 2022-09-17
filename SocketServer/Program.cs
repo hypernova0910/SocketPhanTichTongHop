@@ -142,7 +142,7 @@ namespace SocketServer
                                         doc => doc.lat_value > boundary.minLat &&
                                             doc.lat_value < boundary.maxLat &&
                                             doc.long_value > boundary.minLong &&
-                                            doc.long_value > boundary.minLong).ToList();
+                                            doc.long_value < boundary.maxLong).ToList();
                                     int count = 0;
                                     foreach (InfoConnect doc in docs)
                                     {
@@ -237,10 +237,10 @@ namespace SocketServer
                             }
                         });
                         thread.IsBackground = true;
-                        CustomTimeout timeout = new CustomTimeout(() =>
-                        {
-                            thread.Abort();
-                        }, 30000);
+                        //CustomTimeout timeout = new CustomTimeout(() =>
+                        //{
+                        //    thread.Abort();
+                        //}, 30000);
                         thread.Start();
 
                     }

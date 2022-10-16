@@ -22,5 +22,9 @@ namespace Delaunay
         public DateTime time_action { get; set; }
         public int bit_sens { get; set; }
         public bool isMachineBom { get; set; }
+
+        public double dilution { get; set; }
+
+        public int satelliteCount { get; set; }
     }
 }

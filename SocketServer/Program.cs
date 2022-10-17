@@ -115,6 +115,8 @@ namespace SocketServer
                             {
                                 Console.WriteLine(received.Message);
                                 Boundary boundary = JsonConvert.DeserializeObject<Boundary>(received.Message);
+                                Console.WriteLine("boundary.minBomb: " + boundary.minBomb);
+                                Console.WriteLine("boundary.minMine: " + boundary.minMine);
                                 //ptbm.Set.Clear();
                                 Console.WriteLine("BAT DAU PHAN TICH GOI:" + boundary.timeSent.ToString("dd/MM/yyyy HH:mm:ss"));
                                 lstInputBomb.Clear();

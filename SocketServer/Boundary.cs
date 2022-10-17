@@ -24,6 +24,10 @@ namespace Delaunay
         public double nguongMin { get; set; }
         public int minClusterSize { get; set; }
 
+        public double minBomb { get; set; }
+
+        public double minMine { get; set; }
+
         public Boundary()
         {
             minLat = -1;

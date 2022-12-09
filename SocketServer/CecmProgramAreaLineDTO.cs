@@ -19,5 +19,12 @@ namespace Delaunay
         public long? cecmprogramareamap_id { get; set; }
         public long? cecmprogram_id { get; set; }
 
+        public double Length
+        {
+            get
+            {
+                return Math.Sqrt(Math.Pow(start_x - end_x, 2) + Math.Pow(start_y - end_y, 2));
+            }
+        }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Delaunay;
+using DieuHanhCongTruong.Command;
 using gg.Mesh;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
+using SocketServer.Common;
 using SocketServer.HierarchicalClusteringUtils;
 using SocketServer.KMeanCluster;
 using System;
@@ -214,13 +216,32 @@ namespace SocketServer
                                 //Console.WriteLine("lst_bom.Count: " + lst_bom.Count);
                                 //List<Vertex> lst_min = ptm.phanTichMin(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT);
                                 //Console.WriteLine("lst_min.Count: " + lst_min.Count);
-                                List<Vertex> lst_bom = ptb.phanTichBomNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo, boundary.nguongBom, boundary.minBomb);
+
+                                //double ranhDoPT = 0.2;
+                                ChiaMatCatOLuoiData data = new ChiaMatCatOLuoiData();
+                                data.gocTuyChon1 = 90;
+                                data.isBacNamGoc1 = 2;
+                                data.khoangCachChia1 = boundary.ranhDoPT;
+
+                                //convert to utm
+                                //double[] latlongMax = Functions.ConverLatLongToUTM(boundary.maxLat, boundary.maxLong);
+                                //boundary.maxLong = latlongMax[0];
+                                //boundary.maxLat = latlongMax[1];
+                                //double[] latlongMin = Functions.ConverLatLongToUTM(boundary.minLat, boundary.minLong);
+                                //boundary.minLong = latlongMin[0];
+                                //boundary.minLat = latlongMin[1];
+
+                                ChiaMatCatCmd cmd = new ChiaMatCatCmd();
+                                List<CecmProgramAreaLineDTO> lines = cmd.DrawLineJigAll(boundary, data);
+                                lines.Reverse();
+
+                                List<Vertex> lst_bom = ptb.phanTichBomNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, lines, boundary.nguongBom, boundary.minBomb);
                                 Console.WriteLine("lst_bom.Count: " + lst_bom.Count);
                                 if (lst_bom.Count > 0)
                                 {
                                     lst_bom = HierarchicalClustering.Cluster(lst_bom, boundary.minClusterSize, Vertex.TYPE_BOMB);
                                 }
-                                List<Vertex> lst_min = ptm.phanTichMinNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo, boundary.nguongMin, boundary.minMine);
+                                List<Vertex> lst_min = ptm.phanTichMinNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, lines, boundary.nguongMin, boundary.minMine);
                                 Console.WriteLine("lst_min.Count: " + lst_min.Count);
                                 if (lst_min.Count > 0)
                                 {

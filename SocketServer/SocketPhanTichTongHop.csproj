@@ -41,6 +41,9 @@
     <Reference Include="Aglomera, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Aglomera.1.1.1\lib\netstandard1.3\Aglomera.dll</HintPath>
     </Reference>
+    <Reference Include="CoordinateSharp, Version=2.14.2.1, Culture=neutral, PublicKeyToken=f45e02df057b7725, processorArchitecture=MSIL">
+      <HintPath>..\packages\CoordinateSharp.2.14.2.1\lib\net40\CoordinateSharp.dll</HintPath>
+    </Reference>
     <Reference Include="DnsClient, Version=1.4.0.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
       <HintPath>..\packages\DnsClient.1.4.0\lib\net471\DnsClient.dll</HintPath>
     </Reference>
@@ -222,6 +225,9 @@
   <ItemGroup>
     <Compile Include="Boundary.cs" />
     <Compile Include="CecmProgramAreaLineDTO.cs" />
+    <Compile Include="ChiaRanhDo\ChiaMatCatCmd.cs" />
+    <Compile Include="ChiaRanhDo\Point2d.cs" />
+    <Compile Include="Common\Functions.cs" />
     <Compile Include="CustomTimeout.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -214,13 +214,13 @@ namespace SocketServer
                                 //Console.WriteLine("lst_bom.Count: " + lst_bom.Count);
                                 //List<Vertex> lst_min = ptm.phanTichMin(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT);
                                 //Console.WriteLine("lst_min.Count: " + lst_min.Count);
-                                List<Vertex> lst_bom = ptb.phanTichBomNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo, boundary.nguongBom);
+                                List<Vertex> lst_bom = ptb.phanTichBomNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo, boundary.nguongBom, boundary.minBomb);
                                 Console.WriteLine("lst_bom.Count: " + lst_bom.Count);
                                 if (lst_bom.Count > 0)
                                 {
                                     lst_bom = HierarchicalClustering.Cluster(lst_bom, boundary.minClusterSize, Vertex.TYPE_BOMB);
                                 }
-                                List<Vertex> lst_min = ptm.phanTichMinNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo, boundary.nguongMin);
+                                List<Vertex> lst_min = ptm.phanTichMinNew(minxRec, minyRec, maxxRec, maxyRec, boundary.khoangPT, boundary.lstRanhDo, boundary.nguongMin, boundary.minMine);
                                 Console.WriteLine("lst_min.Count: " + lst_min.Count);
                                 if (lst_min.Count > 0)
                                 {

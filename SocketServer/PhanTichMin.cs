@@ -777,7 +777,7 @@ namespace Delaunay
             //////}
         }
 
-        public List<Vertex> phanTichMinNew(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT, List<CecmProgramAreaLineDTO> lstRanhDo, double nguong)
+        public List<Vertex> phanTichMinNew(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT, List<CecmProgramAreaLineDTO> lstRanhDo, double nguong, double minMine)
         {
             Console.WriteLine("Nguong min: " + nguong);
             List<Vertex> lstBom = new List<Vertex>();
@@ -868,7 +868,7 @@ namespace Delaunay
                         minKhoang = lstZBieuDo[0];
                     };
 
-                    if (Math.Abs(minKhoang) < M_DIS && Math.Abs(maxKhoang) < M_DIS)
+                    if (Math.Abs(minKhoang) < minMine && Math.Abs(maxKhoang) < minMine)
                     {
                         //Console.WriteLine("RÃNH " + k + "KHÔNG CÓ BOM");
                     }

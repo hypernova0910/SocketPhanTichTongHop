@@ -760,7 +760,7 @@ namespace Delaunay
             //////}
         }
 
-        public List<Vertex> phanTichBomNew(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT, List<CecmProgramAreaLineDTO> lstRanhDo, double nguong)
+        public List<Vertex> phanTichBomNew(float minxRec, float minyRec, float maxxRec, float maxyRec, int khoangPT, List<CecmProgramAreaLineDTO> lstRanhDo, double nguong, double minBomb)
         {
             Console.WriteLine("Nguong bom: " + nguong);
             Console.WriteLine("Trước lọc bomb: " + Set.Count);
@@ -860,7 +860,7 @@ namespace Delaunay
                         minKhoang = lstZBieuDo[0];
                     };
 
-                    if (Math.Abs(minKhoang) < 3 && Math.Abs(maxKhoang) < 3)
+                    if (Math.Abs(minKhoang) < minBomb && Math.Abs(maxKhoang) < minBomb)
                     {
                         //Console.WriteLine("RÃNH " + k + "KHÔNG CÓ BOM");
                     }
